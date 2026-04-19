@@ -49,15 +49,26 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Redis
-builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
-builder.Services.AddStackExchangeRedisCache(options =>
+// Redis (with error handling for development)
+try
 {
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
-});
+    builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")));
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    });
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Redis connection failed: {ex.Message}");
+    // Continue without Redis for development
+}
 
 // SignalR
 builder.Services.AddSignalR();
+
+// Health Checks
+builder.Services.AddHealthChecks();
 
 // TODO: Add custom services (RedisMatchStore, GameEngine, MatchService) in later phases
 

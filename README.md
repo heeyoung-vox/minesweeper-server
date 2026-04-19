@@ -3,7 +3,7 @@
 A multiplayer Minesweeper backend built with .NET 8, PostgreSQL, Redis, and SignalR.
 
 ## Tech Stack
-- **.NET 8** - Web API framework
+- **.NET 19** - Web API framework
 - **PostgreSQL** - Primary database with EF Core
 - **Redis** - Real-time game state storage
 - **SignalR** - WebSocket communication
